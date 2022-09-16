@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h2>Min bokliste</h2>
+    <fieldset>
+        <legend>Legg til bøker</legend>
+            <label for="title">Tittel</label>
+            <input type="text" id="title-txt">
+
+            <label for="author">Forfatter</label>
+            <input type="text" id="author-txt">
+            
+            <button id="addBook-btn" onclick="addBookList()">Legg til bok</button>
+            <button id="deleteBook-btn" onclick="deleteBookList()">Slett listen</button>
+
+            <section id="output-section"></section>
+        </legend>
+    </fieldset>
+
+
+    <script>
+
+        const titleInput = document.getElementById("title-txt");
+        const authorInput = document.getElementById("author-txt");
+        const outputSection = document.getElementById("output-section");
+
+        const addBookList = () => {
+            const numberOfItems = localStorage.length;
+            let booklist;
+
+            if (numberOfItems === 0) {
+                booklist = [];
+      
+            } else {
+                booklist = JSON.parse(localStorage.getItem("booklist"));
+            }
+        
+            let book = {title: titleInput.value, author: authorInput.value};
+            booklist.push(book);
+            localStorage.setItem("booklist", JSON.stringify(booklist));
+            showBooks();
+        }
+
+        const deleteBookList = () => {
+            localStorage.clear();
+            showBooks();
+        }
+
+        const showBooks = () => {
+            const numberOfItems = localStorage.length;
+            if (numberOfItems > 0) {
+                let booklist = JSON.parse(localStorage.getItem("booklist"));
+                let htmlTxt = "";
+                booklist.forEach (book => {
+                    htmlTxt += `
+                    <article>
+                        <h3>${book.title}</h3>
+                        <p>Av: ${book.author}</p>
+                    </article>`;
+                });
+               outputSection.innerHTML= htmlTxt;
+            } else {
+                outputSection.innerHTML ="";
+            }
+        }
+        (
+            () =>showBooks ()
+        )();
+
+
+
+
+
+
+    </script>
+
+    
+</body>
+</html>
